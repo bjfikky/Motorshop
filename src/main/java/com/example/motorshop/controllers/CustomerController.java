@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/customers")
@@ -34,6 +36,16 @@ public class CustomerController {
         return "customers/index";
     }
 
+    @GetMapping("/{customerId}")
+    public String getCustomerById(@PathVariable Long customerId, Model model) {
+        Customer customer = customerRepository.findById(customerId).get();
+        if (customer == null)
+            return  "customers/index";
+
+        model.addAttribute("customer", customer);
+        return "customers/view-customer";
+    }
+
     @GetMapping("/new")
     public String displayCustomerForm(Model model) {
         Customer customer = new Customer();
@@ -45,18 +57,21 @@ public class CustomerController {
         customer.getMotorcycles().add(motorcycle2);
 
         model.addAttribute("customer", customer);
-
         return "customers/new-customer";
     }
 
     @PostMapping("/save")
     public String createCustomer(Customer customer, Model model) {
-        customerRepository.save(customer);
-
+        // Removing motorcycle objects with empty manufacturer and model
+        List<Motorcycle> motorcyclesToRemove = new ArrayList<>();
         for ( Motorcycle motorcycle :customer.getMotorcycles() ) {
+            if (motorcycle.getModel().isEmpty() && motorcycle.getManufacturer().isEmpty())
+                motorcyclesToRemove.add(motorcycle);
             motorcycle.setCustomer(customer);
         }
-        motorcycleRepository.saveAll(customer.getMotorcycles());
+        customer.getMotorcycles().removeAll(motorcyclesToRemove);
+
+        customerRepository.save(customer);
 
         return "redirect:/customers/new";
     }

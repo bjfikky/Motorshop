@@ -26,7 +26,7 @@ public class Customer {
     private String createdBy;
     @OneToMany(mappedBy = "customer")
     private List<Visit> visits;
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
     private List<Motorcycle> motorcycles = new ArrayList<Motorcycle>();
 
     public Customer() {
