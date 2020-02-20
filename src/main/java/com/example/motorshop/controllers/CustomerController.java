@@ -72,7 +72,11 @@ public class CustomerController {
         customer.getMotorcycles().removeAll(motorcyclesToRemove);
 
         customerRepository.save(customer);
+        motorcycleRepository.saveAll(customer.getMotorcycles());
 
         return "redirect:/customers/new";
     }
+
+//    @PostMapping("/update")
+//    public String updateCustomer()
 }

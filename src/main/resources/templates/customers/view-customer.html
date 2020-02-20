@@ -8,6 +8,7 @@
     <h2 th:text="${customer.firstName + '''s Information'}"></h2>
     <hr>
     <form action="/customers/save" th:object="${customer}" method="POST">
+        <input type="hidden" th:field="${customer.id}">
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
@@ -73,6 +74,7 @@
         <hr>
         <div class="row">
             <div th:each="motorcycle : ${customer.getMotorcycles()}" class="col-sm-6">
+                <input type="hidden" th:field="${customer.motorcycles[__${motorcycleStat.index}__].id}">
                 <h5>Motorcycle 1</h5>
                 <div class="form-group">
                     <label for="manufacturer1">Manufacturer</label>
