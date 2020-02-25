@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layouts :: head('Motorcycle List')"></head>
+<body>
+<nav th:replace="layouts :: navbar"></nav>
+
+<div class="container">
+    <div class="customers">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Manufacturer</th>
+                <th scope="col">Model</th>
+                <th scope="col">Year</th>
+                <th scope="col">Color</th>
+                <th scope="col">Owner</th>
+                <th scope="col">Last Visit</th>
+                <th scope="col">View</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="motorcycle, index : ${motorcycles}">
+                <td th:text="${motorcycle.manufacturer}"></td>
+                <td th:text="${motorcycle.model}"></td>
+                <td th:text="${motorcycle.year}"></td>
+                <td th:text="${motorcycle.color}"></td>
+                <td th:text="${motorcycle.customer.firstName + ' ' + motorcycle.customer.lastName}"></td>
+                <td>Last visit date</td>
+                <td><a th:href="@{|/motorcycles/${motorcycle.id}|}">view</a></td>
+            </tr>
+
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div th:replace="layouts :: scripts"></div>
+</body>
+</html>
